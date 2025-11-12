@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>CheckOut</title>
+</head>
+<body>
+    <header class="hr">
+        <ul style="display: grid; list-style-type: none; grid-template-columns: 1fr 5fr; align-items: center; justify-items: center;">
+            <div style="display: flex; justify-content: start; width: 100%;">
+                <li class="hr_list">
+                    <img alt="Page icon" src="Icons/home_icon.png" class="pg_img">
+                </li>
+                <li>
+                    <a href="index.html" id="pg_link1"><img alt="Home" src="Images/home.png" class="pg_img"></a>
+                </li>
+            </div>
+            <div style="display: flex; justify-content: end; width: 100%;">
+                <li>
+
+                </li>
+                <input class="search" type="text" placeholder="What's on your mind.."/>
+                <li class="hr_list">
+                    <a href="portfolio.html" class="pg_link">Portfolio</a>
+                </li>
+                <li class="hr_list">
+                    <a href="blog_page.html" class="pg_link">Blog</a>
+                </li>
+                <li class="hr_list">
+                    <a href="e_commerce.html" class="pg_link">E-Commerce</a>
+                </li>
+            </div>
+        </ul>
+    </header>
+    <main style="max-width:1000px;margin:24px auto;padding:16px;">
+        <section style="display:flex;gap:24px;align-items:flex-start;">
+            <div style="flex:2;background:#fff;padding:16px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.06);">
+                <h2 style="margin-top:0">Your Cart</h2>
+                <div id="items_list">
+                    <!-- items will be injected here -->
+                </div>
+            </div>
+            <aside style="flex:1;background:#fff;padding:16px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.06);">
+                <h3 style="margin-top:0">Order Summary</h3>
+                <p>Items: <strong id="checkout_total_items">0</strong></p>
+                <p>Total: <strong id="checkout_total_price">$0.00</strong></p>
+                <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px;">
+                    <button id="confirm_btn" style="background:#2b7a78;color:white;padding:10px;border-radius:6px;border:none;cursor:pointer;">Are you sure?</button>
+                    <button id="clear_cart" style="background:#f25f5c;color:white;padding:10px;border-radius:6px;border:none;cursor:pointer;">Clear Cart</button>
+                    <a href="e_commerce.html" style="display:inline-block;text-align:center;padding:10px;border-radius:6px;border:1px solid #ddd;text-decoration:none;color:#333;">Continue shopping</a>
+                </div>
+                <div id="thanks" style="margin-top:12px;color:green;font-weight:600;display:none;">Thank you for your purchase!</div>
+            </aside>
+        </section>
+
+    <script>
+        (function(){
+            function formatCurrency(n){ return '$' + Number(n || 0).toFixed(2); }
+            var cart = JSON.parse(localStorage.getItem('cart')) || { items: [], totalItems: 0, totalPrice: 0 };
+
+            var itemsList = document.getElementById('items_list');
+            var totalItemsEl = document.getElementById('checkout_total_items');
+            var totalPriceEl = document.getElementById('checkout_total_price');
+
+            function render(){
+                itemsList.innerHTML = '';
+                if (!cart.items || !cart.items.length) {
+                    itemsList.innerHTML = '<p style="color:#666;">No items in cart.</p>';
+                } else {
+                    cart.items.forEach(function(it){
+                        var div = document.createElement('div');
+                        div.style.display = 'flex';
+                        div.style.gap = '12px';
+                        div.style.alignItems = 'center';
+                        div.style.padding = '10px 0';
+                        div.style.borderBottom = '1px solid #eee';
+
+                        var img = document.createElement('img'); img.src = it.image; img.style.width='80px'; img.style.height='80px'; img.style.objectFit='cover'; img.style.borderRadius='6px';
+                        var info = document.createElement('div'); info.style.flex='1';
+                        info.innerHTML = '<div style="font-weight:600">'+it.name+'</div><div style="color:#666">Qty: '+it.quantity+' • '+formatCurrency(it.price)+'</div>';
+                        var subtotal = document.createElement('div'); subtotal.style.fontWeight='700'; subtotal.innerText = formatCurrency(it.subtotal);
+                        div.appendChild(img); div.appendChild(info); div.appendChild(subtotal);
+                        itemsList.appendChild(div);
+                    });
+                }
+                totalItemsEl.innerText = cart.totalItems || 0;
+                totalPriceEl.innerText = formatCurrency(cart.totalPrice || 0);
+            }
+
+            render();
+
+            document.getElementById('clear_cart').addEventListener('click', function(){
+                localStorage.removeItem('cart');
+                cart = { items: [], totalItems: 0, totalPrice: 0 };
+                render();
+            });
+
+            document.getElementById('confirm_btn').addEventListener('click', function(){
+                if (!cart.items || !cart.items.length) {
+                    alert('Your cart is empty.');
+                    return;
+                }
+                var ok = confirm('Are you sure you want to finalize this purchase?');
+                if (!ok) return;
+                // finalize sale
+                // (Here you would call a server API; we simulate success)
+                localStorage.removeItem('cart');
+                cart = { items: [], totalItems: 0, totalPrice: 0 };
+                render();
+                // show thank you prompt
+                alert('Thanks for buying from us');
+                var thanks = document.getElementById('thanks');
+                if (thanks) { thanks.style.display = 'block'; }
+            });
+        })();
+    </script>
+</body>
+</html>
