@@ -1,0 +1,17 @@
+:root{
+    --lecturer_color: black;
+    --course_code_color: blue;
+}
+
+.course_code{
+    font-size: 24pt;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--course_code_color);
+}
+
+.course_lecturer{
+    font-size: 20pt;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin-left: 50px;
+    color: var(--lecturer_color);
+}
