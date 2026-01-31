@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -20,7 +21,7 @@ const NewsAggregator = () => {
     const fetchNews = async () => {
       try {
         // Replace 'YOUR_API_KEY' with your actual NewsAPI key
-        const response = await fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=YOUR_API_KEY');
+        const response = await fetch('https://newsapi.org/v2/top-headlines?country=us&apiKey=5e8b45dbc42d4700890c01654a3ac895');
         const data = await response.json();
         if (data.status === 'ok') {
           setNews(data.articles);
